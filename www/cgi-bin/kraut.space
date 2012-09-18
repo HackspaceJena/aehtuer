@@ -1,11 +1,11 @@
 #!/bin/sh -e
 
-function header() {
+header() {
     echo -en 'Content-type: text/html\r\n\r\n'
 }
 
-function header_redir_display() {
-    echo -e 'Location: https://tuer.hackspace-jena.de$SCRIPT_NAME?secret=$secret&display=$1\r'
+header_redir_display() {
+    echo -e "Location: https://tuer.hackspace-jena.de$SCRIPT_NAME?secret=$secret&display=$1\r"
     header
 }
 
@@ -21,8 +21,9 @@ getp() {
   echo "$QUERY_STRING" | tr "?&" "\n" | tr -dc "0-9a-z_=\n" | egrep "^$1=" | sed "s/^$1=//"
 }
 secret=$(getp secret)
-hashed_secret=$(echo "$secret" | md5sum)
+hashed_secret=$(echo "$secret" | md5sum | cut -f1 -d\ )
 cmd=$(getp cmd)
+display=$(getp display)
 
 # check secret
 if [ -z "$secret" ] || ! grep -q "^$hashed_secret$" /etc/door-secrets; then
