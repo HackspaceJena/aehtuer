@@ -15,10 +15,9 @@ getp() {
   echo "$QUERY_STRING" | tr "?&" "\n" | tr -dc "0-9a-z_=\n" | egrep "^$1=" | sed "s/^$1=//"
 }
 secret=$(getp secret)
-hashed_secret=$(echo "$secret" | md5sum)
 cmd=$(getp cmd)
 
-if [ -z "$secret" ] || ! grep -q "^$hashed_secret$" /etc/door-secrets; then
+if [ -z "$secret" ] || ! grep -q "^$secret$" /etc/door-secrets; then
     [ -z "$secret" ] || echo "<p>You ain't no true Kraut!</p>"
     echo '
 <form method="GET" action="'"$SCRIPT_NAME"'">
