@@ -1,16 +1,22 @@
 #!/bin/sh -e
 
-echo 'Content-type: text/html
+function header() {
+    echo -en 'Content-type: text/html\r\n\r\n'
+}
 
-'
+function header_redir_display() {
+    echo -e 'Location: https://tuer.hackspace-jena.de$SCRIPT_NAME?secret=$secret&display=$1\r'
+    header
+}
 
 # enforce SSL
 if [ $SERVER_PORT -ne 443 ]; then
+    header
     echo "<a href=\"https://192.168.23.1$SCRIPT_NAME\">Use the crypto, Luke!</a>"
     exit
 fi
 
-# check secret
+# extract parameters
 getp() {
   echo "$QUERY_STRING" | tr "?&" "\n" | tr -dc "0-9a-z_=\n" | egrep "^$1=" | sed "s/^$1=//"
 }
@@ -18,7 +24,9 @@ secret=$(getp secret)
 hashed_secret=$(echo "$secret" | md5sum)
 cmd=$(getp cmd)
 
+# check secret
 if [ -z "$secret" ] || ! grep -q "^$hashed_secret$" /etc/door-secrets; then
+    header
     [ -z "$secret" ] || echo "<p>You ain't no true Kraut!</p>"
     echo '
 <form method="GET" action="'"$SCRIPT_NAME"'">
@@ -27,21 +35,28 @@ if [ -z "$secret" ] || ! grep -q "^$hashed_secret$" /etc/door-secrets; then
     exit
 fi
 
+# control relais card
 if [ -n "$cmd" ]; then
     case "$cmd" in
 	outdoor_buzz)  pin=1; delay1=5; delay2=3;;
 	indoor_open)   pin=8; delay1=0; delay2=1;;
 	indoor_lock)   pin=4; delay1=0; delay2=1;;
 	indoor_unlock) pin=2; delay1=0; delay2=1;;
-	*) echo 'Do not hack the hackerspace!'"$cmd"; exit;;
+	*) header; echo 'Do not hack the hackerspace!'"$cmd"; exit;;
     esac
 
-    echo "<p>$cmd will open in ${delay1}s for ${delay2}s"
+    # execute long-running ppio job in background shell
     (   sleep $delay1
 	ppio /dev/parports/0 $pin
 	sleep $delay2
 	ppio /dev/parports/0 0
     ) </dev/null >/dev/null 2>/dev/null &
+
+    header_redir_display "$cmd will open in ${delay1}s for ${delay2}s"
+fi
+
+if [ -n "$display" ]; then
+    echo "<p>$display</p>"
 fi
 
 echo '
