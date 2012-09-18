@@ -1,0 +1,54 @@
+#!/bin/sh -e
+
+echo 'Content-type: text/html
+
+'
+
+# enforce SSL
+if [ $SERVER_PORT -ne 443 ]; then
+    echo "<a href=\"https://192.168.23.1$SCRIPT_NAME\">Use the crypto, Luke!</a>"
+    exit
+fi
+
+# check secret
+getp() {
+  echo "$QUERY_STRING" | tr "?&" "\n" | tr -dc "0-9a-z_=\n" | egrep "^$1=" | sed "s/^$1=//"
+}
+secret=$(getp secret)
+cmd=$(getp cmd)
+
+if [ -z "$secret" ] || ! grep -q "^$secret$" /etc/door-secrets; then
+    [ -z "$secret" ] || echo "<p>You ain't no true Kraut!</p>"
+    echo '
+<form method="GET" action="'"$SCRIPT_NAME"'">
+<input name=secret><input type=submit>
+</form>'
+    exit
+fi
+
+if [ -n "$cmd" ]; then
+    case "$cmd" in
+	outdoor_buzz)  pin=1; delay1=5; delay2=3;;
+	indoor_open)   pin=8; delay1=0; delay2=1;;
+	indoor_lock)   pin=4; delay1=0; delay2=1;;
+	indoor_unlock) pin=2; delay1=0; delay2=1;;
+	*) echo 'Do not hack the hackerspace!'"$cmd"; exit;;
+    esac
+
+    echo "<p>$cmd will open in ${delay1}s for ${delay2}s"
+    (   sleep $delay1
+	ppio /dev/parports/0 $pin
+	sleep $delay2
+	ppio /dev/parports/0 0
+    ) </dev/null >/dev/null 2>/dev/null &
+fi
+
+echo '
+<form method="GET" action="'"$SCRIPT_NAME"'">
+<input type=hidden name=secret value="'"$secret"'">
+<input type=submit name=cmd value=outdoor_buzz>
+<input type=submit name=cmd value=indoor_open>
+<br /><br />
+<input type=submit name=cmd value=indoor_lock>
+<input type=submit name=cmd value=indoor_unlock>
+</form>'
