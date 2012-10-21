@@ -1,0 +1,27 @@
+body{
+	color:#EEEEEE;
+	font-size:100.1%;
+	text-align: center;
+	margin-top: 75px;
+	background: black;
+}
+inputfield{
+	padding: 10px;
+}
+input.textfield {
+	background-color: #111111;
+	color: #EEEEEE;
+	border-color: #222222;
+	border-style: solid;
+	border-width: 1px;
+}
+input.button {
+	background-color: orange;
+	border-color: white black black white;
+	border-radius: 5px 5px 5px 5px;
+	border-style: solid;
+	border-width: 1px;
+	color: black;
+	font-weight: bold;
+	padding: 1px;
+}
