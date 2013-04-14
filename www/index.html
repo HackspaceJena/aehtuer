@@ -1,23 +1,33 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-
+<!DOCTYPE html>
+<html lang="de">
 <head>
-	<title>Sesam &ouml;ffne Dich!</title>
-	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
-	<meta name="generator" content="Geany 1.23" />
-	<link rel="stylesheet" href="style.css" />
+	<meta charset="utf-8">
+	<title>Sesam öffne dich!</title>
+	<meta name="viewport" content="width=device-width, target-densitydpi=device-dpi">
+	<link rel="stylesheet" href="style.css">
+	<style type="text/css">
+@-o-viewport { width:device-width }
+@-moz-viewport { width:device-width }
+@-webkit-viewport { width:device-width }
+@-ms-viewport { width:device-width }
+@-viewport { width:device-width }
+@media screen and (max-width: 480px) {
+  body { margin:0; }
+  input { width:96%; margin:1em 0; }
+}
+	</style>
+	<link rel="favicon shortcut icon apple-touch-icon-precomposed" type="image/png" href="data:image/png;base64,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" >
 </head>
 
 <body>
-	<div>
-	<p>Salam Aladdin</p>
-	<p>Wie lautet Dein Secret?</p>
+	<label for="secret">
+		<h2>Salam Aladdin</h2>
+		<p>Wie lautet dein <span class="accesskey">T</span>oken?</p>
+	</label>
 	<form method="GET" action="https://tuer.hackspace-jena.de/cgi-bin/kraut.space">
-		<input class="textfield" name="secret">
-		<input class="button" type="submit" value="Sesam befragen">
+		<input id="secret" class="textfield" name="secret" accesskey="t" required autofocus placeholder="dein token">
+		<input class="button" type="submit" accesskey="s">
 	</form>
-	</div>
 </body>
 
 </html>
