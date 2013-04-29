@@ -32,10 +32,7 @@ display=$(getp display)
 if [ -z "$secret" ] || ! grep -q "^$hashed_secret$" /etc/door-secrets; then
     header
     [ -z "$secret" ] || echo "<p>You ain't no true Kraut!</p>"
-    echo '
-<form method="GET" action="'"$SCRIPT_NAME"'">
-<input name=secret><input type=submit>
-</form>'
+    cat /www/index.html
     exit
 fi
 
@@ -64,12 +61,8 @@ if [ -n "$display" ]; then
     echo "<p>$display</p>"
 fi
 
-echo '
-<form method="GET" action="'"$SCRIPT_NAME"'">
-<input type=hidden name=secret value="'"$secret"'">
-<input type=submit name=cmd value=outdoor_buzz>
-<input type=submit name=cmd value=indoor_open>
-<br /><br />
-<input type=submit name=cmd value=indoor_lock>
-<input type=submit name=cmd value=indoor_unlock>
-</form>'
+# todo:
+# htmlspecialchars against XSS here
+# $display into template
+sed 's/XSECRET_HEREX/'"$secret"'/' /www/features.html
+exit
