@@ -42,7 +42,7 @@ fi
 # control relais card
 if [ -n "$cmd" ]; then
     case "$cmd" in
-	outdoor_buzz)  pin=1; delay1=5; delay2=3;;
+	outdoor_buzz)  pin=1; delay1=15; delay2=5;;
 	indoor_open)   pin=8; delay1=0; delay2=1;;
 	indoor_lock)   pin=4; delay1=0; delay2=1;;
 	indoor_unlock) pin=2; delay1=0; delay2=1;;
