@@ -1,27 +1,19 @@
+@-o-viewport { width:device-width }
+@-moz-viewport { width:device-width }
+@-webkit-viewport { width:device-width }
+@-ms-viewport { width:device-width }
+@-viewport { width:device-width }
+
 body{
-	color:#EEEEEE;
-	font-size:100.1%;
 	text-align: center;
 	margin-top: 75px;
-	background: black;
+}
+
+@media screen and (max-width: 640px) {
+  body { margin:0; }
+  button,
+  input { width:93%; margin:1em 0; }
 }
 inputfield{
 	padding: 10px;
-}
-input.textfield {
-	background-color: #111111;
-	color: #EEEEEE;
-	border-color: #222222;
-	border-style: solid;
-	border-width: 1px;
-}
-input.button {
-	background-color: orange;
-	border-color: white black black white;
-	border-radius: 5px 5px 5px 5px;
-	border-style: solid;
-	border-width: 1px;
-	color: black;
-	font-weight: bold;
-	padding: 1px;
 }
