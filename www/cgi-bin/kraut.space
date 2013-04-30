@@ -32,7 +32,7 @@ display=$(getp display)
 if [ -z "$secret" ] || ! grep -q "^$hashed_secret$" /etc/door-secrets; then
     header
     [ -z "$secret" ] || echo "<p>You ain't no true Kraut!</p>"
-    cat /www/index.html
+    cat /www/secret.html
     exit
 fi
 
