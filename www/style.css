@@ -3,17 +3,10 @@
 @-webkit-viewport { width:device-width }
 @-ms-viewport { width:device-width }
 @-viewport { width:device-width }
-
-body{
-	text-align: center;
-	margin-top: 75px;
-}
-
+body { text-align:center; margin-top:75px }
 @media screen and (max-width: 640px) {
-  body { margin:0; }
+body { margin:0 }
   button,
-  input { width:93%; margin:1em 0; }
+  input { width:93%; margin:1em 0 }
 }
-inputfield{
-	padding: 10px;
-}
+inputfield{ padding:10px }
