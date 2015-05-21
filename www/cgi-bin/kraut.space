@@ -20,6 +20,7 @@ if [ $SERVER_PORT -ne 443 ]; then
 fi
 
 # extract parameters
+# tr -dc removes all characters, this prevents things like xss
 getp() {
   echo "$REQUEST_URI" | sed 's/.*?//' | sed 's/%20/ /g' | tr "?&" "\n" | tr -dc "0-9a-z_= \n" | egrep "^$1=" | sed "s/^$1=//"
 }
@@ -29,6 +30,8 @@ cmd=$(getp cmd)
 display=$(getp display)
 
 # check secret
+# the secrets file has to contain the hashes on a single line, comments are allowed on seperate lines
+# secrets can only contain the characters that are allowed in getp() with tr -dc
 if [ -z "$secret" ] || ! grep -q "^$hashed_secret$" /etc/door-secrets; then
     header
     [ -z "$secret" ] || echo "<p>You ain't no true Kraut!</p>"
@@ -62,7 +65,6 @@ if [ -n "$display" ]; then
 fi
 
 # todo:
-# htmlspecialchars against XSS here
 # $display into template
 sed 's/XSECRET_HEREX/'"$secret"'/' /www/features.html
 exit
