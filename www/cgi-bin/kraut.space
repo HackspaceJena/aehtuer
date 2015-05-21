@@ -10,7 +10,7 @@ header_redir_display() {
 # die lighttpd, die!
 #    echo -en 'Content-type: text/html\n'
 #    echo -e "Status: 301 Moved\n"
-    echo "<head><meta http-equiv=\"Refresh\" content=\"0; https://tuer.hackspace-jena.de$SCRIPT_NAME?secret=$secret&display=$1\"></head>"
+    echo "<head><meta http-equiv=\"Refresh\" content=\"0; https://tuer.kraut.space$SCRIPT_NAME?secret=$secret&display=$1\"></head>"
 }
 
 # enforce SSL
